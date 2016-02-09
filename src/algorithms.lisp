@@ -4,6 +4,9 @@
 
 ;;; "algorithms" goes here. Hacks and glory await!
 
+(defun seq-emptyp (seq)
+  (or (null seq) (equalp seq (vector))))
+
 (defun insertion-sort (seq predicate)
   "=> SEQUENCE
 Worst case O(n^2).
@@ -17,9 +20,11 @@ Best case O(n)."
           (setf (elt a (1+ j)) (elt a j))
           (decf j))
         (setf (elt a (1+ j)) key)
-        (print a)))
+        ;; (print a)
+        ))
     a))
 
+;; TODO : broken
 (defun selection-sort (sequence pred)
   (let ((len (length sequence))
         (seq (copy-seq sequence)))
@@ -29,8 +34,7 @@ Best case O(n)."
               (ej (elt seq j)))
           (when (funcall pred ej ei)
             (setf (elt seq i) ej
-                  (elt seq j) ei)
-            (return)))))
+                  (elt seq j) ei)))))
     seq))
 
 (defun linear-search (seq value)
@@ -39,9 +43,6 @@ Worst case O(n)."
   (iter (for i from 0 below (length seq))
     (when (= (elt seq i) value)
       (return i))))
-
-(defun seq-emptyp (seq)
-  (or (null seq) (equalp seq (vector))))
 
 (defun recursive-linear-search (seq value)
   (labels ((lookfor (current-seq index)
@@ -94,7 +95,7 @@ Worst case O(n)."
     (merge-iter s1 s2 nil)))
 
 (defun merge-sort (seq pred)
-  (print seq)
+  ;; (print seq)
   (let* ((len (length seq))
          (mid (truncate (/ len 2.0))))
     (if (= len 1)
