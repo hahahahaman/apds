@@ -16,7 +16,7 @@ Best case O(n)."
     (iter (for i from 1 below (length a))
       (let ((key (elt a i))
             (j (1- i)))
-        (iter (while (and (>= j 0) (not (funcall predicate (elt a j) key))))
+        (iter (while (and (>= j 0) (funcall predicate key (elt a j))))
           (setf (elt a (1+ j)) (elt a j))
           (decf j))
         (setf (elt a (1+ j)) key)
@@ -24,7 +24,6 @@ Best case O(n)."
         ))
     a))
 
-;; TODO : broken
 (defun selection-sort (sequence pred)
   (let ((len (length sequence))
         (seq (copy-seq sequence)))
