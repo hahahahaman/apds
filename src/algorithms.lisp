@@ -45,7 +45,7 @@ Worst case O(n)."
 
 (defun recursive-linear-search (seq value)
   (labels ((lookfor (current-seq index)
-             (if (seq-emptyp seq)
+             (if (seq-emptyp current-seq)
                  nil
                  (if (eql (elt current-seq 0) value)
                      index

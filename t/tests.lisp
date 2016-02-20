@@ -2,10 +2,21 @@
 
 (deftest test-emptyp ()
   (check
-    (eql (seq-emptyp (list)) t)
-    (eql (seq-emptyp (vector)) t)
-    (eql (seq-emptyp (vector 1)) nil)
-    (eql (seq-emptyp (list 1 2 3)) nil)))
+   (eql (seq-emptyp (list)) t)
+   (eql (seq-emptyp (vector)) t)
+   (eql (seq-emptyp (vector 1)) nil)
+   (eql (seq-emptyp (list 1 2 3)) nil)))
+
+(deftest test-linear-search ()
+  (let ((vec (vector 1 4 5 6 7 12 -1)))
+    (macrolet ((test-func (func)
+                 `(check
+                    (eql (,func vec 12) 5)
+                    (eql (,func vec -1) 6)
+                    (eql (,func vec -10) nil))))
+      (combine-results
+        (test-func linear-search)
+        (test-func recursive-linear-search)))))
 
 (deftest test-merge ()
   (let ((s1 (list 1 2 3 4))
@@ -13,10 +24,10 @@
         (pred1 #'<)
         (pred2 #'>))
     (check
-      (equalp (merge 'vector s1 s2 pred1)
-              (merge-plz 'vector s1 s2 pred1))
-      (equalp (merge 'list s1 s2 pred2)
-              (merge-plz 'list s1 s2 pred2)))))
+     (equalp (merge 'vector s1 s2 pred1)
+             (merge-plz 'vector s1 s2 pred1))
+     (equalp (merge 'list s1 s2 pred2)
+             (merge-plz 'list s1 s2 pred2)))))
 
 (deftest test-sorting ()
   (let* ((seq (list 1 2 0 3 4 5 6 7 100
@@ -39,6 +50,7 @@
 
 (defun run-all-tests ()
   (test-emptyp)
+  (test-linear-search)
   (test-merge)
   (test-sorting))
 
