@@ -7,6 +7,13 @@
 (defun seq-emptyp (seq)
   (or (null seq) (equalp seq (vector))))
 
+(defun equal-or (val check-list &key (equality-op #'eql))
+  (if (consp check-list)
+      (if (funcall equality-op val (car check-list))
+          t
+          (equal-or val (cdr check-list) :equality-op equality-op))
+      (funcall equality-op val check-list)))
+
 (defun insertion-sort (seq predicate)
   "=> SEQUENCE
 Worst case O(n^2).
@@ -51,6 +58,66 @@ Worst case O(n)."
                      index
                      (lookfor (subseq current-seq 1) (1+ index))))))
     (lookfor seq 0)))
+
+(defun binary-search (seq val predicate)
+  (let* ((len (length seq))
+         (mid (floor (/ len 2))))
+    (iter (while t)
+      (let ((elm (elt seq mid)))
+        (if (equalp elm val)
+            (return mid)
+            (if (funcall predicate elm val)
+                (let ((diff (floor (/ (- len mid) 2))))
+                  (if (= diff 0)
+                      (return)
+                      (incf mid diff)))
+                (let ((new-mid (floor (/ mid 2))))
+                  (if (= new-mid mid)
+                      (return)
+                      (setf mid new-mid)))))))))
+
+(defun recursive-binary-search (seq val predicate index)
+  "Assumes seq is sorted from least to greatest."
+  (let ((len (length seq)))
+    (if (seq-emptyp seq)
+        nil
+        (let* ((mid (floor (/ len 2)))
+               (elm (elt seq mid)))
+          (if (equalp elm val)
+              (+ index mid)
+              (if (funcall predicate elm val)
+                  (recursive-binary-search (subseq seq (1+ mid))
+                                           val
+                                           predicate
+                                           (+ index mid 1))
+                  (recursive-binary-search (subseq seq 0 mid) val
+                                           predicate index)))))))
+
+(defun binary-insertion-sort (seq predicate)
+  (let ((s (copy-seq seq)))
+    (iter (for i from 1 below (length s))
+      (let* ((key (elt s i))
+             (start 0)
+             (end i)
+             (mid (+ start (floor (/ (- end start) 2)))))
+        (iter (while (< start end))
+          (cond ((funcall predicate (elt s mid) key)
+                 ;; upper half of array
+                 (setf start (1+ mid)
+                       mid (+ start (floor (/ (- end start) 2)))))
+                (t
+                 ;; lower half
+
+                 ;; push elements up by one
+                 (iter (for j from (1- end) downto mid)
+                   (let ((temp (elt s (1+ j))))
+                     (setf (elt s (1+ j)) (elt s j)
+                           (elt s j) temp)))
+
+                 (setf end mid
+                       mid (+ start (floor (/ (- end start) 2)))))))
+        (setf (elt s start) key)))
+    s))
 
 (defun add-binary-integer-seqs (n1 n2)
   (let* ((a (reverse n1))
@@ -99,7 +166,7 @@ Worst case O(n)."
          (mid (truncate (/ len 2.0))))
     (if (= len 1)
         seq
-        (merge-plz (type-of seq)
+        (merge-plz (if (consp seq) 'list 'vector)
                    (merge-sort (subseq seq 0 mid) pred)
                    (merge-sort (subseq seq mid) pred)
                    pred))))
