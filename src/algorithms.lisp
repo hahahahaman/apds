@@ -60,38 +60,39 @@ Worst case O(n)."
     (lookfor seq 0)))
 
 (defun binary-search (seq val predicate)
-  (let* ((len (length seq))
-         (mid (floor (/ len 2))))
-    (iter (while t)
-      (let ((elm (elt seq mid)))
-        (if (equalp elm val)
-            (return mid)
-            (if (funcall predicate elm val)
-                (let ((diff (floor (/ (- len mid) 2))))
-                  (if (= diff 0)
-                      (return)
-                      (incf mid diff)))
-                (let ((new-mid (floor (/ mid 2))))
-                  (if (= new-mid mid)
-                      (return)
-                      (setf mid new-mid)))))))))
+  (when (not (seq-emptyp seq))
+    (let* ((len (length seq))
+           (mid (floor (/ len 2))))
+      (iter (while t)
+        (let ((elm (elt seq mid)))
+          (if (equalp elm val)
+              (return mid)
+              (if (funcall predicate elm val)
+                  (let ((diff (floor (/ (- len mid) 2))))
+                    (if (= diff 0)
+                        (return)
+                        (incf mid diff)))
+                  (let ((new-mid (floor (/ mid 2))))
+                    (if (= new-mid mid)
+                        (return)
+                        (setf mid new-mid))))))))))
 
 (defun recursive-binary-search (seq val predicate index)
-  "Assumes seq is sorted from least to greatest."
-  (let ((len (length seq)))
-    (if (seq-emptyp seq)
-        nil
-        (let* ((mid (floor (/ len 2)))
-               (elm (elt seq mid)))
-          (if (equalp elm val)
-              (+ index mid)
-              (if (funcall predicate elm val)
-                  (recursive-binary-search (subseq seq (1+ mid))
-                                           val
-                                           predicate
-                                           (+ index mid 1))
-                  (recursive-binary-search (subseq seq 0 mid) val
-                                           predicate index)))))))
+  "Assumes seq is sorted using PREDICATE."
+  (if (seq-emptyp seq)
+      nil
+      (let* ((len (length seq))
+             (mid (floor (/ len 2)))
+             (elm (elt seq mid)))
+        (if (equalp elm val)
+            (+ index mid)
+            (if (funcall predicate elm val)
+                (recursive-binary-search (subseq seq (1+ mid))
+                                         val
+                                         predicate
+                                         (+ index mid 1))
+                (recursive-binary-search (subseq seq 0 mid) val
+                                         predicate index))))))
 
 (defun binary-insertion-sort (seq predicate)
   (let ((s (copy-seq seq)))
@@ -170,3 +171,12 @@ Worst case O(n)."
                    (merge-sort (subseq seq 0 mid) pred)
                    (merge-sort (subseq seq mid) pred)
                    pred))))
+
+(defun sum-of-2=x (seq x)
+  (let* ((s (merge-sort seq #'<))
+         (len (length s)))
+    (iter (for i from 1 below (1- len))
+      (when (binary-search (subseq s 0 i) (- x (elt s i)) #'<)
+        (return t))
+      (when (binary-search (subseq s (1+ i)) (- x (elt s i)) #'<)
+        (return t)))))
