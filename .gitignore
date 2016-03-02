@@ -1,0 +1,13 @@
+##compiled lisp files
+*.fasl
+
+##emacs recovery files
+*~
+
+\*slime-repl\ sbcl\*
+*.bin
+*.exe
+*.dll
+*.so*
+
+*.o
