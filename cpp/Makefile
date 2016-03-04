@@ -1,7 +1,7 @@
 OBJS = main.o data.o algorithms.o
 CC = g++
 DEBUG = -g
-CFLAGS = -Wall -c $(DEBUG)
+CFLAGS = -std=c++11 -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
 testing : $(OBJS)
