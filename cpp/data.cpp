@@ -75,3 +75,49 @@ int bounded_stack::pop(){
 unsigned bounded_stack::get_bound() const {
   return max_size;
 }
+
+/* queue */
+
+list_queue::list_queue(){
+  list.head = nullptr;
+  list.tail = nullptr;
+}
+
+list_queue::~list_queue(){
+  while(list.head != nullptr){
+    this->dequeue();
+  }
+}
+
+void list_queue::enqueue(int n){
+  doubly_node* fresh = new doubly_node;
+  fresh->data = n;
+
+  if (list.head == nullptr){
+    list.head = fresh;
+    list.tail = fresh;
+  } else {
+    list.tail->next = fresh;
+    fresh->prev = list.tail;
+    list.tail = fresh;
+  }
+}
+
+int list_queue::dequeue(){
+  int result = -1;
+  if(list.head != nullptr){
+    result = list.head->data;
+
+    doubly_node *to_delete = list.head;
+    if (list.head->next != nullptr) {
+      list.head->next->prev = nullptr;
+      list.head = list.head->next;
+    } else {
+      list.head = nullptr;
+      list.tail = nullptr;
+    }
+    delete to_delete;
+  }
+
+  return result;
+}

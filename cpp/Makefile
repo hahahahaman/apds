@@ -4,8 +4,8 @@ DEBUG = -g
 CFLAGS = -std=c++11 -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
-testing : $(OBJS)
-	$(CC) $(LFLAGS) $(OBJS) -o testing
+main : $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o testing.bin
 
 main.o : main.cpp data.h algorithms.h
 	$(CC) $(CFLAGS) main.cpp
@@ -17,4 +17,4 @@ algorithms.o : algorithms.h algorithms.cpp
 	$(CC) $(CFLAGS) algorithms.cpp
 
 clean:
-	\rm *.o *~ testing
+	\rm *.o testing.bin

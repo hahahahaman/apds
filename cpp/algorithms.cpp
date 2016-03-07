@@ -51,7 +51,7 @@ int* bubble_sort(int* array, int min, int max){
       if (array[j] < array[j-1]){
         int temp = array[j];
         array[j] = array[j-1];
-        array[j-1] = temp
+        array[j-1] = temp;
       }
     }
   }
@@ -77,15 +77,15 @@ int* merge_sort(int* array, int min, int max){
     return array;
 
   int mid = min + (max - min)/2;
-  merge_sort (a, min, mid, scratch);
-  merge_sort (a, mid, max, scratch);
+  merge_sort (array, min, mid);
+  merge_sort (array, mid, max);
 
   int left = min, right = mid;
 
   int scratch[max-min];
 
   for (int i = 0; i < max-min; i++){
-    if (left < mid && (array[left] < array[right] || right == end)) {
+    if (left < mid && (array[left] < array[right] || right == max)) {
       scratch[i] = array[left];
       left++;
     } else {

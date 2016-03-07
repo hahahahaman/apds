@@ -22,12 +22,12 @@ int* bubble_sort(int * array, int min, int max);
 
 int* insertion_sort(int * array, int min, int max);
 
-int* merge_sort(int * array, int min, int max, int* scratch);
+int* merge_sort(int * array, int min, int max);
 
-int* heap_sort(int * array, int min, int max);
+/* int* heap_sort(int * array, int min, int max); */
 
-int* quick_sort(int * array, int min, int max);
+/* int* quick_sort(int * array, int min, int max); */
 
-int* radix_sort(int * array, int min, int max);
+/* int* radix_sort(int * array, int min, int max); */
 
 #endif

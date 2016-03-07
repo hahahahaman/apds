@@ -19,7 +19,7 @@ struct singly_list {
 
 struct doubly_node {
   int data;
-  doubly_node *prev, *next;
+  doubly_node *prev = nullptr, *next = nullptr;
 };
 
 struct doubly_list {
@@ -63,5 +63,18 @@ class bounded_stack {
 };
 
 /* queue */
+
+class list_queue {
+ public:
+  list_queue();
+  ~list_queue();
+
+  void enqueue(int n);
+
+  int dequeue();
+
+ private:
+  doubly_list list;
+};
 
 #endif
