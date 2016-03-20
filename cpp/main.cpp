@@ -6,6 +6,12 @@
 #include <iostream>
 #include <cstdio>
 #include <climits>
+#include <string>
+#include <memory>
+#include <stack>
+#include <vector>
+#include <utility>
+#include <ctime>
 
 #include "algorithms.h"
 #include "data.h"
@@ -66,7 +72,11 @@ unsigned coin_problem(unsigned sum, unsigned *values, unsigned num_values){
   return min[sum];
 }
 
+vector<int> preorder_keys, inorder_keys;
+
 int main() {
+  srand(time(NULL));
+
   // int * ptr = new int; // ptr assigns 4 bytes, or 32 bits in the heap
 
   // int *array = new int[10]; // array is assigned 40 bytes in heap
@@ -101,13 +111,63 @@ int main() {
   // unsigned coin_values[] = {1, 3, 5};
   // cout << coin_problem(11, coin_values, 3) << endl;
 
-  list_queue* q = new list_queue;
+  // list_queue* q = new list_queue;
 
-  for(int i =0; i <10; i++) q->enqueue(i);
+  // for(int i =0; i <10; i++) q->enqueue(i);
 
   // for (int i = 0; i < 10; i++) cout << q->dequeue() << endl;
 
-  delete q;
+  // delete q;
+
+  // string str1("1231414");
+  // string str2(str1.rbegin(), str1.rend());
+
+  // cout << str2 <<endl;
+
+  // cout << reverse_64bit(1) << endl;
+
+  // shared_ptr<int> spi = make_shared<int>(10);
+  // cout << *spi << endl;
+
+  shared_ptr<binary_tree<int>> tree = generate_binary_tree(10, 0);
+
+  auto add_inorder =
+    [=](shared_ptr<binary_tree<int>> n)->void
+    {
+      inorder_keys.push_back(n->data);
+    };
+
+  auto add_preorder =
+    [=](shared_ptr<binary_tree<int>> n)->void
+    {
+      preorder_keys.push_back(n->data);
+    };
+
+  inorder_traversal<int>(tree,add_inorder);
+
+  for (int i : inorder_keys) printf("%d ", i);
+  printf("\n");
+
+  preorder_traversal<int>(tree, add_preorder);
+  for (int i : preorder_keys) printf("%d ", i);
+  printf("\n");
+
+  int start_index = 0;
+  auto reconstructed_tree =
+    inorder_preorder_reconstruction<int>(inorder_keys, preorder_keys,
+                                         0, inorder_keys.size(), start_index);
+
+  inorder_keys.clear();
+  preorder_keys.clear();
+
+  inorder_traversal<int>(reconstructed_tree,add_inorder);
+
+  for (int i : inorder_keys) printf("%d ", i);
+  printf("\n");
+
+  preorder_traversal<int>(reconstructed_tree, add_preorder);
+  for (int i : preorder_keys) printf("%d ", i);
+  printf("\n");
 
   return 0;
 }

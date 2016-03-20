@@ -1,6 +1,8 @@
 #ifndef _DATA_H_
 #define _DATA_H_
 
+#include <memory>
+
 /*
   Things to think about:
   - arrays
@@ -24,6 +26,13 @@ struct doubly_node {
 
 struct doubly_list {
   doubly_node *head, *tail;
+};
+
+template <typename T>
+class node_t {
+ public:
+  T data;
+  std::shared_ptr<T> next;
 };
 
 void list_traverse (const singly_list &list);
@@ -75,6 +84,15 @@ class list_queue {
 
  private:
   doubly_list list;
+};
+
+/* binary tree */
+
+template <typename T>
+class binary_tree {
+ public:
+  T data;
+  std::shared_ptr<binary_tree<T>> left, right;
 };
 
 #endif

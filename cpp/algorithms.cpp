@@ -1,6 +1,10 @@
 #include "algorithms.h"
 #include <cmath>
 #include <cstdio>
+#include <stack>
+#include <queue>
+
+using namespace std;
 
 int linear_search (int val, int * array, unsigned length){
   for (unsigned i = 0; i < length; i++){
@@ -72,6 +76,33 @@ int* insertion_sort(int* array, int min, int max){
   return array;
 }
 
+void merge (int *array, const unsigned &min, const unsigned &mid, const unsigned &max){
+  unsigned left = min, right = mid, i = 0;
+  int temp[max-min];
+
+  while (left < mid || right < max){
+    if (left >= mid){
+      temp[i] = array[right];
+      right++;
+    } else if (right >=  max){
+      temp[i] = array[left];
+      left++;
+    } else if (array[left] <= array[right]){
+      temp[i] = array[left];
+      left++;
+    } else if (array[right] < array[left]){
+      temp[i] = array[right];
+      right++;
+    }
+
+    i++;
+  }
+
+  for (unsigned j = min; j < max; j++){
+    array[j] = temp[j-min];
+  }
+}
+
 int* merge_sort(int* array, int min, int max){
   if (max-min < 2) // subarray size == 1
     return array;
@@ -99,4 +130,61 @@ int* merge_sort(int* array, int min, int max){
   }
 
   return array;
+}
+
+// int* heap_sort (int *array, int min, int max){
+//   // heapify (a, min, max)
+// }
+
+unsigned long long reverse_64bit(unsigned long long input){
+  unsigned long long out = 0;
+
+  for (int i = 0; i < 64; i++){
+    out |= (input & 1) << (63 - i);
+    input >>= 1;
+  }
+  return out;
+}
+
+std::shared_ptr<binary_tree<int>>
+generate_binary_tree(unsigned num_nodes, int key){
+
+  if (num_nodes == 0) return nullptr;
+
+  auto root = std::make_shared<binary_tree<int>>();
+
+  root->data = key;
+  num_nodes--;
+  key++;
+
+  queue<shared_ptr<binary_tree<int>>> next;
+
+  next.push(root);
+
+  while (num_nodes || !next.empty()){
+    auto current = next.front();
+    next.pop();
+
+    unsigned direct_children = num_nodes < 2 ? num_nodes: 2;
+
+    unsigned side = rand() % 2;
+
+    for(unsigned i = 0; i < direct_children; i++){
+      auto child = std::make_shared<binary_tree<int>>();
+
+      child->data = key;
+      num_nodes--;
+      key++;
+
+      if(side == 0){
+        side++;
+        current->left = child;
+      } else {
+        side--;
+        current->right = child;
+      }
+      next.push(child);
+    }
+  }
+  return root;
 }
