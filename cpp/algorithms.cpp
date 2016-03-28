@@ -132,9 +132,95 @@ int* merge_sort(int* array, int min, int max){
   return array;
 }
 
-// int* heap_sort (int *array, int min, int max){
-//   // heapify (a, min, max)
-// }
+inline int heap_parent(int i){
+  return (i-1)/2;
+}
+
+inline int heap_left(int i){
+  return (i << 1) + 1;
+}
+
+inline int heap_right(int i){
+  return (i << 1) + 2;
+}
+
+void sift_down(std::vector<int> &array, int start, int end){
+  // repair the heap
+
+  int root = start;
+
+  while (heap_left(root) <= end){ // while root has at least 1 child
+    int child = heap_left(root);
+    int swap = root;
+
+    // compare the root to its left and then right children
+    // which ever one is greatest shall be swapped and become the new root
+
+    if (array[swap] < array[child])
+      swap = child;
+
+    if (child+1 <= end && array[swap] < a[child+1])
+      swap = child+1;
+
+    if (swap == root) return; // max heap property satisfied, return
+    else {
+      // swap in the new root
+      swap(array[root], a[swap]);
+
+      // continue onto the sub tree where the child was the root
+      root = swap;
+    }
+  }
+}
+
+void heapify(std::vector<int> &array){
+  unsigned start = heap_parent(array.size()-1);
+
+  while (start >= 0){
+    sift_down(array,start, array.size()-1);
+    start--;
+  }
+}
+
+int* heap_sort (std::vector<int> &array){
+
+  // build heap from array so that largest value is at root
+  heapify (a, min, max);
+
+  unsigned end = array.size()-1;
+
+  while (end > 0){
+    swap(a[end], a[0]);
+    end--;
+    sift_down (array, 0, end);
+  }
+}
+
+int partition(int * array, int min, int max){
+  int key = array[max-1];
+  int i = min;
+
+  for (int j = min; j < max-1; j++){
+    if (array[j] < key){
+      swap(array[i], array[j]);
+      i++;
+    }
+  }
+  swap(array[max-1], array[i]);
+
+  return i;
+}
+
+int* quick_sort(int * array, int min, int max){
+  if (max - min > 1){
+    int pivot = partition(array, min, max);
+
+    quicksort(array, min, pivot);
+    quicksort(array, pivot+1, max);
+  }
+
+  return array;
+}
 
 unsigned long long reverse_64bit(unsigned long long input){
   unsigned long long out = 0;

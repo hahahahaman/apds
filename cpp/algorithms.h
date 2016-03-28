@@ -36,9 +36,21 @@ void merge (int *array, const unsigned &min, const unsigned &mid, const unsigned
 
 int* merge_sort(int * array, int min, int max);
 
-int* heap_sort(int * array, int min, int max);
+int heap_parent(int i);
 
-/* int* quick_sort(int * array, int min, int max); */
+int heap_left(int i);
+
+int heap_right(int i);
+
+void sift_down(std::vector<int> &array, int start, int end);
+
+void heapify(std::vector<int> &array);
+
+int* heap_sort(std::vector<int> &array);
+
+int partition(int * array, int min, int max)
+
+int* quick_sort(int * array, int min, int max);
 
 /* int* radix_sort(int * array, int min, int max); */
 
