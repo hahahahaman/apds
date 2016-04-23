@@ -2,6 +2,7 @@
 #define _ALGORITHMS_H_
 
 #include <memory>
+#include <stack>
 #include <queue>
 #include <stdexcept>
 #include <cstdlib>
@@ -169,5 +170,48 @@ inorder_preorder_reconstruction(const std::vector<T> &inorder_keys,
 
 std::shared_ptr<binary_tree<int>>
 generate_binary_tree(unsigned num_nodes, int key);
+
+/*
+void dfs(node start){
+  stack<node> s;
+  s.push(start);
+
+  while(!s.empty()){
+    node top = s.top();
+    s.pop();
+
+    if(!visited(top)){
+      if (done()) break;
+
+      visit(top);
+      for(auto neighbor: top.neighbors)
+        s.push(neighbor);
+    }
+  }
+}
+*/
+
+/*
+void bfs(node start){
+  queue<node> q;
+  q.push(start);
+
+  visit(start);
+
+  while(!q.empty()){
+    node top = q.top();
+    q.pop();
+
+    if(done()) break;
+
+    for(auto neighbor : top.neighbors){
+      if(!visited(neighbor)){
+        q.push(neighbor);
+        visit(neighbor);
+      }
+    }
+  }
+}
+*/
 
 #endif
